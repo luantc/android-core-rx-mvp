@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:969104936989:android:4f675c3537567164",
         "android_client_info": {
-          "package_name": "com.sapient.dubaiproperties"
+          "package_name": "core.android"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "969104936989-vncfqoeealkecg1m6q2n7smo1f15mtl1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.sapient.dubaiproperties",
+            "package_name": "core.android",
             "certificate_hash": "0b9d1f8b2fdd50ba02ad6390d386aa67c6a6ba48"
           }
         },
@@ -54,7 +54,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:969104936989:android:60e6dad5a49d6e02",
         "android_client_info": {
-          "package_name": "com.sapient.dubaiproperties"
+          "package_name": "core.android"
         }
       },
       "oauth_client": [
@@ -62,7 +62,7 @@
           "client_id": "969104936989-6d54blmdusa2h2h9sc8qlspubeiepfh7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.sapient.dubaiproperties",
+            "package_name": "core.android",
             "certificate_hash": "0b9d1f8b2fdd50ba02ad6390d386aa67c6a6ba48"
           }
         },
