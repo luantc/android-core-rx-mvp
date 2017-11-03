@@ -1,0 +1,80 @@
+ext {
+
+    android = [
+            compileSdkVersion: 26,
+            buildToolsVersion: '26.0.1',
+            applicationId    : "core.android",
+            minSdkVersion    : 19,
+            targetSdkVersion : 25,
+            versionCode      : 1,
+            versionName      : "1.0.0"
+    ]
+
+    def dependVersion = [
+            support    : "25.3.0",
+            retrofit   : "2.3.0",
+            okhttp     : "3.9.0",
+            dagger2    : "2.0.2",
+            butterknife: "8.2.1",
+            glide      : "4.1.1",
+    ]
+
+    dependencies = [
+            //base
+            "appcompat-v7"              : "com.android.support:appcompat-v7:${dependVersion.support}",
+            "cardview-v7"               : "com.android.support:cardview-v7:${dependVersion.support}",
+            "recyclerview-v7"           : "com.android.support:recyclerview-v7:${dependVersion.support}",
+            "design"                    : "com.android.support:design:${dependVersion.support}",
+            "support"                   : "com.android.support:support-v4:${dependVersion.support}",
+
+            //rx
+            "rxjava"                    : "io.reactivex.rxjava2:rxjava:2.0.7",
+            "rxandroid"                 : "io.reactivex.rxjava2:rxandroid:2.0.1",
+
+            //network
+            "gson"                      : "com.google.code.gson:gson:2.8.2",
+            "retrofit"                  : "com.squareup.retrofit2:retrofit:${dependVersion.retrofit}",
+            "retrofit-converter-gson"   : "com.squareup.retrofit2:converter-gson:${dependVersion.retrofit}",
+            "retrofit-adapter-rxjava2"  : "com.squareup.retrofit2:adapter-rxjava2:${dependVersion.retrofit}",
+            "okhttp"                    : "com.squareup.okhttp3:okhttp:${dependVersion.okhttp}",
+            "okhttp-logging-interceptor": "com.squareup.okhttp3:logging-interceptor:${dependVersion.okhttp}",
+            "glide"                     : "com.github.bumptech.glide:glide:${dependVersion.glide}",
+            "glide-compiler"            : "com.github.bumptech.glide:compiler:${dependVersion.glide}",
+            "glide-okhttp3-integration" : "com.github.bumptech.glide:okhttp3-integration:${dependVersion.glide}",
+
+            //di
+            "dagger"                    : "com.google.dagger:dagger:${dependVersion.dagger2}",
+            "dagger-compiler"           : "com.google.dagger:dagger-compiler:${dependVersion.dagger2}",
+            "butterknife"               : "com.jakewharton:butterknife:${dependVersion.butterknife}",
+            "butterknife-compiler"      : "com.jakewharton:butterknife-compiler:${dependVersion.butterknife}",
+            "annotation"                : "org.glassfish:javax.annotation:10.0-b28",
+
+            //other
+            "multidex"                  : "com.android.support:multidex:1.0.1",
+            "utilcode"                  : "com.blankj:utilcode:1.9.2",
+    ]
+}
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'io.realm:realm-gradle-plugin:3.7.2'
+        classpath 'com.google.gms:google-services:3.1.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
