@@ -42,6 +42,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             signingConfig signingConfigs.release
         }
+        print0{
+            buildConfigField "String", "HOST", "\"https://reqres.in/\""
+        }
     }
 
     compileOptions {
@@ -81,6 +84,8 @@ dependencies {
     //other
     compile rootProject.ext.dependencies["multidex"]
     compile rootProject.ext.dependencies["utilcode"]
+    compile rootProject.ext.dependencies["adapter"]
+
 
 }
 apply plugin: 'me.tatarka.retrolambda'

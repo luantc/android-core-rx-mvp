@@ -52,6 +52,8 @@ ext {
             //other
             "multidex"                  : "com.android.support:multidex:1.0.1",
             "utilcode"                  : "com.blankj:utilcode:1.9.2",
+            "adapter"                   : "com.scglab.common:list-adapter:1.1.2",
+
     ]
 }
 buildscript {

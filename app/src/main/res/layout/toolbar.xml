@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <View
+        android:id="@+id/view_statusbar"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:gravity="center"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:src="@drawable/back" />
+        </LinearLayout>
+
+        <core.android.widget.DPTextView
+            app:fontStyle="heavy"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/ll_back"
+            android:id="@+id/tv_title"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:text="Mockup"
+            android:textSize="15.34sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+
+        <core.android.widget.DPTextView
+            android:visibility="gone"
+            android:layout_marginEnd="24dp"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/tv_end"
+            android:textColor="#d2cceb"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+
+</LinearLayout>

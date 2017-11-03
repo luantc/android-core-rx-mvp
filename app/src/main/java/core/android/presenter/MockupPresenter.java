@@ -1,6 +1,8 @@
 package core.android.presenter;
 
 
+import android.app.Activity;
+
 import com.blankj.utilcode.util.NetworkUtils;
 
 import javax.inject.Inject;
@@ -20,10 +22,12 @@ import static core.android.model.event.Event.MOCKUP;
 public class MockupPresenter extends RxPresenter<MockupContract.View> implements MockupContract.Presenter {
 
     private RetrofitClient retrofit;
+    private Activity activity;
 
     @Inject
-    public MockupPresenter(RetrofitClient retrofit) {
+    public MockupPresenter(RetrofitClient retrofit, Activity a) {
         this.retrofit = retrofit;
+        this.activity = a;
     }
 
     @Override
