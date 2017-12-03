@@ -38,16 +38,16 @@ public class MockupPresenter extends RxPresenter<MockupContract.View> implements
     @Override
     public void mockup(Account account) {
         if (NetworkUtils.isConnected()) {
-            view.loading();
+            view.showLoadingDialog("Hello");
             addSubscribe(retrofit.mockup(account)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(r -> {
-                        view.hide();
+                        view.hideLoadingDialog();
                         view.success(r);
                     }, e -> {
-                        view.hide();
-                        view.error(e.getMessage());
+                        view.hideLoadingDialog();
+                        view.onError(e.getMessage());
                     })
             );
         } else {

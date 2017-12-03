@@ -14,7 +14,7 @@ import core.android.base.BaseActivity;
 public class MockupActivity extends BaseActivity<MockupPresenter> implements MockupContract.View {
 
     @Override
-    protected void initInject() {
+    protected void injectComponent() {
         getActivityComponent().inject(this);
     }
 
@@ -24,7 +24,7 @@ public class MockupActivity extends BaseActivity<MockupPresenter> implements Moc
     }
 
     @Override
-    protected void initEventAndData() {
+    protected void onViewReady() {
         FragmentUtils.add(getSupportFragmentManager(), MockupFragment.newInstance(),R.id.fl_main);
         presenter.mockup(new Account("peter@klaven", "cityslicka"));
     }

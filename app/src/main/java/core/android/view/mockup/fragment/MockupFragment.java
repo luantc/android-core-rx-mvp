@@ -30,7 +30,7 @@ public class MockupFragment extends BaseFragment<MockupBusPresenter> implements 
     }
 
     @Override
-    protected void initInject() {
+    protected void injectComponent() {
         getFragmentComponent().inject(this);
     }
 
@@ -40,7 +40,7 @@ public class MockupFragment extends BaseFragment<MockupBusPresenter> implements 
     }
 
     @Override
-    protected void initEventAndData() {
+    protected void onViewReady() {
         RendererFactory rendererFactory = new RendererFactory();
         rendererFactory.put(HeaderRenderer.class, R.layout.header_item);
         rendererFactory.put(ContentRenderer.class, R.layout.content_item);
@@ -83,7 +83,7 @@ public class MockupFragment extends BaseFragment<MockupBusPresenter> implements 
     }
 
     @Override
-    public void error(String error) {
+    public void onError(String error) {
         ToastUtils.showLong(error);
     }
 

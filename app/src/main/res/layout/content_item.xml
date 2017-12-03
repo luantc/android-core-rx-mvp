@@ -33,7 +33,7 @@
             android:layout_toEndOf="@+id/iv_icon"
             android:orientation="vertical">
 
-            <core.android.widget.DPTextView
+            <core.android.widget.BaseTextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textColor="#545960"
                 android:textSize="13sp" />
 
-            <core.android.widget.DPTextView
+            <core.android.widget.BaseTextView
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,12 +59,12 @@
             android:orientation="vertical"
             android:visibility="invisible">
 
-            <core.android.widget.DPTextView
+            <core.android.widget.BaseTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp" />
 
-            <core.android.widget.DPTextView
+            <core.android.widget.BaseTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
@@ -80,7 +80,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="25dp" />
 
-        <core.android.widget.DPTextView
+        <core.android.widget.BaseTextView
             android:id="@+id/tv_skip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

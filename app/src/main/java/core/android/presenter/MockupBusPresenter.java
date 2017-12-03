@@ -32,9 +32,9 @@ public class MockupBusPresenter extends RxPresenter<MockupBusContract.View> impl
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(r -> {
-                    view.error(r.getMessage());
+                    view.onError(r.getMessage());
                 }, e -> {
-                    view.error(e.getMessage());
+                    view.onError(e.getMessage());
                 })
         );
     }

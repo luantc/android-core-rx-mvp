@@ -9,14 +9,16 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.ReplacementSpan;
 import android.text.style.ScaleXSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.widget.Button;
+import android.widget.EditText;
 
 import core.android.R;
 import core.android.util.DPConstant;
@@ -24,8 +26,8 @@ import core.android.util.DPUtils;
 import core.android.util.FontCache;
 
 
-public class DPButton extends Button {
-    private static final String TAG = DPButton.class.getSimpleName();
+public class BaseEditText extends EditText {
+    private static final String TAG = BaseEditText.class.getSimpleName();
     private static final String XML_NAMESPACE_ANDROID = "http://schemas.android.com/apk/res/android";
     // Original text value (before spacing)
     private CharSequence originalText = null;
@@ -40,26 +42,24 @@ public class DPButton extends Button {
     // Padding start value
     private int paddingStart = 0;
 
-    private boolean textUnderline = false;
-
     private float originalTextSize;
 
-    public DPButton(Context context) {
+    public BaseEditText(Context context) {
         super(context);
     }
 
-    public DPButton(Context context, AttributeSet attrs) {
+    public BaseEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         checkCustomAttributes(context, attrs);
     }
 
-    public DPButton(Context context, AttributeSet attrs, int defStyle) {
+    public BaseEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         checkCustomAttributes(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public DPButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BaseEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         checkCustomAttributes(context, attrs);
     }
@@ -68,8 +68,8 @@ public class DPButton extends Button {
         dpScale = DPUtils.scaleDensity(context);
         pxScale = DPUtils.scalePixel(context);
         paddingStart = ViewCompat.getPaddingStart(this);
-        originalText = getText();
         originalTextSize = getTextSize();
+        // originalText = getText();
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DPGText);
 
@@ -80,13 +80,13 @@ public class DPButton extends Button {
             float fontSize = a.getFloat(R.styleable.DPGText_fontSize, 0f);
             setFontSize(fontSize);
 
+            // Hint size
+            float fontSizeHint = a.getFloat(R.styleable.DPGText_fontSizeHint, 0f);
+            setFontSizeHint(fontSize, fontSizeHint);
+
             // Check if textAllCaps flag is set
             textAllCaps = attrs.getAttributeBooleanValue(XML_NAMESPACE_ANDROID, "textAllCaps", false);
 
-            textUnderline = a.getBoolean(R.styleable.DPGText_fontUnderline, false);
-            if (textUnderline) {
-                setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            }
             // Text spacing
             spacing = a.getFloat(R.styleable.DPGText_fontSpacing, 0f);
             applyLetterSpacing();
@@ -108,21 +108,57 @@ public class DPButton extends Button {
     }
 
     public void setFontSize(float fontSize) {
-        if (fontSize != 0f) {
+        if (fontSize > 0f) {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize * dpScale);
+        }
+    }
+
+    public void setFontSizeHint(final float fontSize, final float fontSizeHint) {
+        if (fontSize > 0f && fontSizeHint > 0f) {
+            // Initial state
+            if (TextUtils.isEmpty(getText())) {
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSizeHint * dpScale);
+            } else {
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize * dpScale);
+            }
+
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSizeHint * dpScale);
+            addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // do nothing
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // Update text size if changed
+                    if (TextUtils.isEmpty(getText())) {
+                        setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSizeHint * dpScale);
+                    } else {
+                        setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize * dpScale);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // do nothing
+                }
+            });
         }
     }
 
     @Override
     public void setText(CharSequence text, BufferType type) {
         super.setText(text, type);
-        originalText = text;
+        // originalText = text;
         applyLetterSpacing();
     }
 
     @Override
-    public CharSequence getText() {
-        return !TextUtils.isEmpty(originalText) ? originalText : super.getText();
+    public Editable getText() {
+        // return !TextUtils.isEmpty(originalText) ? (Editable) originalText : super.getText();
+        return super.getText();
     }
 
     public void setSpacing(float spacing) {
@@ -144,6 +180,10 @@ public class DPButton extends Button {
         // Apply letter spacing for device with API before 21
         if (TextUtils.isEmpty(originalText)
                 || originalText.length() < 2) {
+            return;
+        }
+
+        if (this instanceof EditText) {
             return;
         }
 
@@ -222,6 +262,12 @@ public class DPButton extends Button {
             }
         }
     }
+
+    @Override
+    protected void onSelectionChanged(int selStart, int selEnd) {
+        super.onSelectionChanged(selStart, selEnd);
+    }
+
     public float getOriginalTextSize(){
         return originalTextSize;
     }

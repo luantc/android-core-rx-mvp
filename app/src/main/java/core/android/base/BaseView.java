@@ -1,7 +1,7 @@
 package core.android.base;
 
 public interface BaseView {
-    void loading();
-    void hide();
-    void error(String error);
+    void showLoadingDialog(String msg);
+    void hideLoadingDialog();
+    void onError(String error);
 }

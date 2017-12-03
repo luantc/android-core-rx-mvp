@@ -9,16 +9,14 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.style.ReplacementSpan;
 import android.text.style.ScaleXSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import core.android.R;
 import core.android.util.DPConstant;
@@ -26,13 +24,16 @@ import core.android.util.DPUtils;
 import core.android.util.FontCache;
 
 
-public class DPEditText extends EditText {
-    private static final String TAG = DPEditText.class.getSimpleName();
+public class BaseTextView extends TextView {
+    private static final String TAG = BaseTextView.class.getSimpleName();
     private static final String XML_NAMESPACE_ANDROID = "http://schemas.android.com/apk/res/android";
     // Original text value (before spacing)
     private CharSequence originalText = null;
     // Flag to present text in ALL CAPS
     private boolean textAllCaps = false;
+
+    private boolean textUnderline = false;
+
     // Spacing value (dp)
     private float spacing = 0f;
     // Density (dp) scale based on 320 screen resolution
@@ -44,22 +45,22 @@ public class DPEditText extends EditText {
 
     private float originalTextSize;
 
-    public DPEditText(Context context) {
+    public BaseTextView(Context context) {
         super(context);
     }
 
-    public DPEditText(Context context, AttributeSet attrs) {
+    public BaseTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         checkCustomAttributes(context, attrs);
     }
 
-    public DPEditText(Context context, AttributeSet attrs, int defStyle) {
+    public BaseTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         checkCustomAttributes(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public DPEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BaseTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         checkCustomAttributes(context, attrs);
     }
@@ -68,11 +69,10 @@ public class DPEditText extends EditText {
         dpScale = DPUtils.scaleDensity(context);
         pxScale = DPUtils.scalePixel(context);
         paddingStart = ViewCompat.getPaddingStart(this);
+        originalText = getText();
         originalTextSize = getTextSize();
-        // originalText = getText();
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DPGText);
-
             int customStyle = a.getInt(R.styleable.DPGText_fontStyle, 0);
             setCustomFont(getContext(), DPConstant.FONT_STYLES.get(customStyle));
 
@@ -80,15 +80,16 @@ public class DPEditText extends EditText {
             float fontSize = a.getFloat(R.styleable.DPGText_fontSize, 0f);
             setFontSize(fontSize);
 
-            // Hint size
-            float fontSizeHint = a.getFloat(R.styleable.DPGText_fontSizeHint, 0f);
-            setFontSizeHint(fontSize, fontSizeHint);
-
             // Check if textAllCaps flag is set
             textAllCaps = attrs.getAttributeBooleanValue(XML_NAMESPACE_ANDROID, "textAllCaps", false);
 
             // Text spacing
             spacing = a.getFloat(R.styleable.DPGText_fontSpacing, 0f);
+
+            textUnderline = a.getBoolean(R.styleable.DPGText_fontUnderline, false);
+            if (textUnderline) {
+                setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            }
             applyLetterSpacing();
             // Check more attributes here
 
@@ -108,57 +109,21 @@ public class DPEditText extends EditText {
     }
 
     public void setFontSize(float fontSize) {
-        if (fontSize > 0f) {
+        if (fontSize != 0f) {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize * dpScale);
-        }
-    }
-
-    public void setFontSizeHint(final float fontSize, final float fontSizeHint) {
-        if (fontSize > 0f && fontSizeHint > 0f) {
-            // Initial state
-            if (TextUtils.isEmpty(getText())) {
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSizeHint * dpScale);
-            } else {
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize * dpScale);
-            }
-
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSizeHint * dpScale);
-            addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    // do nothing
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    // Update text size if changed
-                    if (TextUtils.isEmpty(getText())) {
-                        setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSizeHint * dpScale);
-                    } else {
-                        setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize * dpScale);
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    // do nothing
-                }
-            });
         }
     }
 
     @Override
     public void setText(CharSequence text, BufferType type) {
         super.setText(text, type);
-        // originalText = text;
+        originalText = text;
         applyLetterSpacing();
     }
 
     @Override
-    public Editable getText() {
-        // return !TextUtils.isEmpty(originalText) ? (Editable) originalText : super.getText();
-        return super.getText();
+    public CharSequence getText() {
+        return !TextUtils.isEmpty(originalText) ? originalText : super.getText();
     }
 
     public void setSpacing(float spacing) {
@@ -180,10 +145,6 @@ public class DPEditText extends EditText {
         // Apply letter spacing for device with API before 21
         if (TextUtils.isEmpty(originalText)
                 || originalText.length() < 2) {
-            return;
-        }
-
-        if (this instanceof EditText) {
             return;
         }
 
@@ -262,12 +223,6 @@ public class DPEditText extends EditText {
             }
         }
     }
-
-    @Override
-    protected void onSelectionChanged(int selStart, int selEnd) {
-        super.onSelectionChanged(selStart, selEnd);
-    }
-
     public float getOriginalTextSize(){
         return originalTextSize;
     }

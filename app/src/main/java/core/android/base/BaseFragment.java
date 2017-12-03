@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements BaseView{
+public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements BaseView {
 
     @Inject
     protected T presenter;
@@ -41,16 +41,16 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
                 .build();
     }
 
-    public void loading() {
-        ((BaseActivity)getActivity()).loading();
+    public void showLoadingDialog(String msg) {
+        ((BaseActivity) getActivity()).showLoadingDialog(msg);
     }
 
-    public void hide() {
-        ((BaseActivity)getActivity()).hide();
+    public void hideLoadingDialog() {
+        ((BaseActivity) getActivity()).hideLoadingDialog();
     }
 
     @Override
-    public void error(String error) {
+    public void onError(String error) {
 
     }
 
@@ -62,7 +62,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(getLayoutId(), null, false);
-        initInject();
+        injectComponent();
         return view;
     }
 
@@ -71,7 +71,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
         super.onViewCreated(view, savedInstanceState);
         presenter.attachView(this);
         unbinder = ButterKnife.bind(this, view);
-        initEventAndData();
+        onViewReady();
     }
 
     @Override
@@ -86,9 +86,9 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
         if (presenter != null) presenter.detachView();
     }
 
-    protected abstract void initInject();
+    protected abstract void injectComponent();
 
     protected abstract int getLayoutId();
 
-    protected abstract void initEventAndData();
+    protected abstract void onViewReady();
 }

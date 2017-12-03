@@ -16,7 +16,7 @@ import android.text.style.ReplacementSpan;
 import android.text.style.ScaleXSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.widget.TextView;
+import android.widget.Button;
 
 import core.android.R;
 import core.android.util.DPConstant;
@@ -24,16 +24,13 @@ import core.android.util.DPUtils;
 import core.android.util.FontCache;
 
 
-public class DPTextView extends TextView {
-    private static final String TAG = DPTextView.class.getSimpleName();
+public class BaseButton extends Button {
+    private static final String TAG = BaseButton.class.getSimpleName();
     private static final String XML_NAMESPACE_ANDROID = "http://schemas.android.com/apk/res/android";
     // Original text value (before spacing)
     private CharSequence originalText = null;
     // Flag to present text in ALL CAPS
     private boolean textAllCaps = false;
-
-    private boolean textUnderline = false;
-
     // Spacing value (dp)
     private float spacing = 0f;
     // Density (dp) scale based on 320 screen resolution
@@ -43,24 +40,26 @@ public class DPTextView extends TextView {
     // Padding start value
     private int paddingStart = 0;
 
+    private boolean textUnderline = false;
+
     private float originalTextSize;
 
-    public DPTextView(Context context) {
+    public BaseButton(Context context) {
         super(context);
     }
 
-    public DPTextView(Context context, AttributeSet attrs) {
+    public BaseButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         checkCustomAttributes(context, attrs);
     }
 
-    public DPTextView(Context context, AttributeSet attrs, int defStyle) {
+    public BaseButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         checkCustomAttributes(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public DPTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BaseButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         checkCustomAttributes(context, attrs);
     }
@@ -73,6 +72,7 @@ public class DPTextView extends TextView {
         originalTextSize = getTextSize();
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DPGText);
+
             int customStyle = a.getInt(R.styleable.DPGText_fontStyle, 0);
             setCustomFont(getContext(), DPConstant.FONT_STYLES.get(customStyle));
 
@@ -83,13 +83,12 @@ public class DPTextView extends TextView {
             // Check if textAllCaps flag is set
             textAllCaps = attrs.getAttributeBooleanValue(XML_NAMESPACE_ANDROID, "textAllCaps", false);
 
-            // Text spacing
-            spacing = a.getFloat(R.styleable.DPGText_fontSpacing, 0f);
-
             textUnderline = a.getBoolean(R.styleable.DPGText_fontUnderline, false);
             if (textUnderline) {
                 setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             }
+            // Text spacing
+            spacing = a.getFloat(R.styleable.DPGText_fontSpacing, 0f);
             applyLetterSpacing();
             // Check more attributes here
 

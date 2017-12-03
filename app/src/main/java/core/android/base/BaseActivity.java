@@ -19,6 +19,7 @@ import core.android.R;
 import core.android.di.component.ActivityComponent;
 import core.android.di.component.DaggerActivityComponent;
 import core.android.di.module.ActivityModule;
+import core.android.widget.BaseTextView;
 
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements BaseView {
 
@@ -29,6 +30,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     protected FrameLayout fl_main;
     @BindView(R.id.fl_pb)
     public FrameLayout fl_pb;
+    @BindView(R.id.tv_loading)
+    BaseTextView tv_loading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,22 +43,23 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         fl_main = (FrameLayout) findViewById(R.id.fl_main);
         fl_main.addView(view);
         unbinder = ButterKnife.bind(this);
-        initInject();
+        injectComponent();
         if (presenter != null)
             presenter.attachView(this);
-        initEventAndData();
+        onViewReady();
     }
 
-    public void loading() {
+    public void showLoadingDialog(String msg) {
         fl_pb.setVisibility(View.VISIBLE);
+        tv_loading.setText(msg);
     }
 
-    public void hide() {
+    public void hideLoadingDialog() {
         fl_pb.setVisibility(View.GONE);
     }
 
     @Override
-    public void error(String error) {
+    public void onError(String error) {
 
     }
 
@@ -86,7 +90,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     /**
      * This method is for injecting activity component used in the activity
      */
-    protected abstract void initInject();
+    protected abstract void injectComponent();
 
     /**
      * This method is for initializing layout used in the activity.
@@ -96,5 +100,5 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     /**
      * This method is for initializing data after layout is loaded.
      */
-    protected abstract void initEventAndData();
+    protected abstract void onViewReady();
 }
