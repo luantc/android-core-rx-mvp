@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 
 import javax.inject.Inject;
@@ -27,9 +28,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     protected T presenter;
     protected Activity context;
     private Unbinder unbinder;
-    protected FrameLayout fl_main;
+    FrameLayout fl_main;
     @BindView(R.id.fl_pb)
-    public FrameLayout fl_pb;
+    RelativeLayout fl_pb;
     @BindView(R.id.tv_loading)
     BaseTextView tv_loading;
 
